@@ -1,0 +1,134 @@
+﻿<Window x:Class="SessionStatus.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SessionStatus"
+        mc:Ignorable="d"
+        Title="" Height="470" Width="700" ResizeMode="NoResize"
+        Background="Black"
+        FontFamily="Tahoma" FontSize="14"
+        Foreground="White">
+    <Window.Resources>
+        <local:StatusToColorConverter x:Key ="StatusToColorConverter"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="61*"/>
+            <ColumnDefinition Width="70*"/>
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="0"
+                  HorizontalAlignment="Left"
+                  Width="320"
+                  BorderThickness="0"
+                  Margin="5"
+                  Background="#745eff" Grid.ColumnSpan="2">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="60"/>
+                </Grid.RowDefinitions>
+                <Label HorizontalAlignment="Center" Content="Дисциплины" Foreground="#ffa3fc" FontSize="16" FontWeight="Bold" Grid.ColumnSpan="2"/>
+                <ListView x:Name="Subjects" Grid.Row="1" Margin="5" ItemsSource="{Binding FilterSubjects}" SelectedItem="{Binding SelectedSubject}" Background="#8e83d4" BorderThickness="0" Grid.ColumnSpan="2">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="5" BorderThickness="1" CornerRadius="4" Width ="300">
+                                <Grid Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock FontWeight="Bold" Foreground="#412919" Text="{Binding SubjectName}" HorizontalAlignment="Left"/>
+                                    <TextBlock Width="100" Grid.Column="1" Background="{Binding SubjectStatus, Converter={StaticResource StatusToColorConverter}}"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid Grid.Row="2" Margin="5,5,5,5" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Background="White" Foreground="#412919" FontWeight="Bold" Margin="6,5,5,5" MaxHeight="32" MaxWidth="137" Content="Изменить статус" Command="{Binding  ChangeSubjectStatusCommand}"/>
+                    <Button Background="White" Foreground="#412919" FontWeight="Bold" Margin="5" Grid.Column="1" MaxHeight="32" MaxWidth="137" Content="Удалить" Command="{Binding DeleteSubjectCommand}"/>
+                </Grid>
+
+            </Grid>
+
+        </GroupBox>
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GroupBox
+                  BorderThickness="0"
+                  Margin="10, 5, 5, 5"
+                  Background="#745eff">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Label HorizontalAlignment="Center" Content="Фильтр" Foreground="#ffa3fc" FontSize="16" FontWeight="Bold"/>
+                    <StackPanel Grid.Row="1">
+                        <RadioButton Margin="5" Content="Все" Command="{Binding PressAllCommand}" IsChecked="True" Foreground="#000" />
+                        <RadioButton Margin="5" Content="Успешно сданные" Command="{Binding PressReadyCommand}" Foreground="#000" Checked="RadioButton_Checked"/>
+                        <RadioButton Margin="5" Content="Не сданные" Command="{Binding PressNoReadyCommand}" Foreground="#000"/>
+                    </StackPanel>
+                    <Grid Grid.Row="2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Button Background="White" Foreground="#412919" FontWeight="Bold" Margin="5" MaxHeight="32" MinWidth="137" Content="Отобразить" Command="{Binding AcceptFilter}" />
+                        <Button Background="white" Foreground="#412919" Grid.Column="1" Margin="5" MaxHeight="32" MinWidth="137" Content="Сохранить в файл" Command="{Binding SaveFileCommand}" FontWeight="Bold" FontSize="14"/>
+                    </Grid>
+
+
+                </Grid>
+
+            </GroupBox>
+            <GroupBox Grid.Row="1"
+                  BorderThickness="0"
+                  Margin="10, 5, 5, 5"
+                  Background="#745eff">
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="60"/>
+                    </Grid.RowDefinitions>
+                    <Label HorizontalAlignment="Center" Content="Добавить дисциплину" Foreground="#ffa3fc" FontSize="16" FontWeight="Bold"/>
+                    <Grid Grid.Row="1" Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="50"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label Foreground="#000" Content="Дисциплина" VerticalAlignment="Center" HorizontalAlignment="Center" Height="30" Width="100"/>
+                        <TextBox Grid.Column="1" Margin="5" BorderThickness="2" Height="25" Background="White" Text="{Binding newSubject.SubjectName, UpdateSourceTrigger=PropertyChanged}"/>
+                        <Label Foreground="#000" Grid.Row="1" Content="Статус" VerticalAlignment="Center" HorizontalAlignment="Center" Height="30" Width="65"/>
+                        <ComboBox Background="White" Grid.Row="1" Grid.Column="1" Margin="5" Height="25" BorderThickness="2"
+                                  SelectedItem="{Binding newSubject.SubjectStatus}"
+                                  ItemsSource="{Binding status}"/>
+                    </Grid>
+                    <Button Background="White" Foreground="#412919" FontWeight="Bold" Grid.Row="2" Margin="61,10,0,0" MaxHeight="30" MinWidth="200" HorizontalAlignment="Left" Content="Добавить дисциплину" Command="{Binding AddNewSubjectCommand}" Width="200"/>
+                </Grid>
+
+            </GroupBox>
+        </Grid>
+    </Grid>
+</Window>
